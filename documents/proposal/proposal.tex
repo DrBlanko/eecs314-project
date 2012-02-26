@@ -1,0 +1,37 @@
+%EECS 314 Project Proposal
+
+%Prepared by:
+% John Cleaver
+% Joeseph Sewell
+% Will Earley
+% Travis Dillan
+
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+
+\title{EECS 314 \\ Project Proposal}
+\author{John Cleaver \and Joseph Sewell \and William Earley \and Travis Dillan}
+\date{28 Feb 2012}
+
+\begin{document}
+\maketitle
+
+\section{Group Name}
+
+The name for the group will be RUBIKs: Reliable Unstoppable Binary Instruction Koders.
+
+\section{Project Name}
+
+The name of the project will be Rubik's Cube Solver.
+
+\section{Project Description}
+
+The project will take in a binary file that represents a 3x3, 6-face Rubik's Cube. The file shall contain 32-bit words representing each of six colors (0x1, 0x2, 0x3, 0x4, 0x5, 0x6) in normal computer graphics order (i.e., start at the top left of the cube's first face, then the top middle of the cube’s first face, etc.), in the order of each face. It is required that the middle squares be of different colors. This cube will then be solved using Korf's Algorithm, and track the list of moves needed to solve the cube. The list of moves will then be output into a human-readable text file.
+
+\section{Project Breakup}
+
+The algorithm to solve a Rubik's cube involves performing steps to get from one state of a Rubik's cube to another. There are roughly four ``main'' states for the cube: completely scrambled, non-corner edge pieces in place, corner pieces in place, and fully solved. One member will focus on each state transition while the remaining member will focus on input/output and storage of each state.
+
+\end{document}
