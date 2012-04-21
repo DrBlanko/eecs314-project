@@ -1,0 +1,9 @@
+Rubik's Cube Solver Output
+---
+Rotate Front  face counter-clockwise.
+Rotate Right  face clockwise.
+Rotate Back   face clockwise.
+Rotate Left   face counter-clockwise.
+Rotate Bottom face counter-clockwise.
+Rotate Top    face clockwise.
+End of output.
