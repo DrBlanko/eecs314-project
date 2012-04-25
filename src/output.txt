@@ -1,0 +1,4 @@
+Rubik's Cube Solver Output
+---
+Rotate Down   face clockwise.
+End of output.

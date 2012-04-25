@@ -1,8 +1,8 @@
 # Team RUBIKs
-# John Cleaver
-# Travis Dillan
-# William Earley: Different Rotates
-# Joseph Sewell : File I/O and Data Structure Planning
+# John Cleaver   : Documentation
+# Travis Dillan  : Actual Algorithm
+# William Earley : Turns Code and Algorithm Help
+# Joseph Sewell  : File I/O and Data Structure Planning
 
 # Rubik’s Cube Solver
 # EECS 314
@@ -20,16 +20,18 @@ filename: .asciiz "input.bin"
 outFnme : .asciiz "output.txt"
 fErrTxt : .asciiz "\nFile error..."
 exitTxt : .asciiz "\nProgram exiting. Results output to "
-debug   : .asciiz "\nDebug assertion."
+debug   : .asciiz "\n--Current State--"
+assert  : .asciiz "\nDebug assertion."
+newline : .asciiz "\n"
 
 outBgn  : .ascii "Rubik's Cube Solver Output\n---\n"   # Len: 31
 instBgn : .ascii "Rotate "          # Len: 7
-nameF   : .ascii "Front  face "     # Len: 12
-nameR   : .ascii "Right  face "
-nameB   : .ascii "Back   face "
-nameL   : .ascii "Left   face "
-nameU   : .ascii "Bottom face "
-nameT   : .ascii "Top    face "
+nameF   : .asciiz "Front  face "     # Len: 12
+nameR   : .asciiz "Right  face "
+nameB   : .asciiz "Back   face "
+nameL   : .asciiz "Left   face "
+nameD   : .asciiz "Down   face "
+nameU   : .asciiz "Upper  face "
 instCtr : .ascii "counter-"         # Len: 8
 instEnd : .ascii "clockwise.\n"     # Len: 11
 outEnd  : .ascii "End of output.\n" # Len: 15
@@ -37,21 +39,22 @@ outEnd  : .ascii "End of output.\n" # Len: 15
         # Data for cube itself
         # each stored in phone keypad order
 dF:      .byte 0xAA
-frontA:  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Front of cube
+frontA:  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Front of cube  (F)
 dR:      .byte 0xBB
-rightA:  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Right of cube
+rightA:  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Right of cube  (R)
 dB:      .byte 0xCC
-backA:   .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Back of cube
+backA:   .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Back of cube   (B)
 dL:      .byte 0xDD
-leftA:   .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Left of cube
-dU:      .byte 0xEE
-bottomA: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Bottom of cube
-dT:      .byte 0xFF
-topA:    .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Top of cube
+leftA:   .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Left of cube   (L)
+dD:      .byte 0xEE
+downA:   .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Bottom of cube (D)
+dU:      .byte 0xFF
+upperA:  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0 # Top of cube    (U)
 
         # Other data
-outDesc : .word 0         # File descriptor for output
-storedRt: .word 0         # Stored return address from start
+outDesc  : .word 0          # File descriptor for output
+storedRt : .word 0          # Stored return address from start
+storedRt2: .word 0          # Stored return address during moves
 
 #
 # Code Start
@@ -122,7 +125,7 @@ sLoad:
     # Read bottom face
     li  $v0, 14     # read (syscall 14)
     add $a0, $s1, $zero
-    la  $a1, bottomA
+    la  $a1, downA
     li  $a2, 9
     syscall
     blt $v0, $zero, sFileErr
@@ -130,7 +133,7 @@ sLoad:
     # Read top face
     li  $v0, 14     # read (syscall 14)
     add $a0, $s1, $zero
-    la  $a1, topA
+    la  $a1, upperA
     li  $a2, 9
     syscall
     blt $v0, $zero, sFileErr
@@ -160,12 +163,16 @@ sSetupOutput:
     li  $a2, 31
     syscall
     
-    j sBegin
+    j dBegin
+
+#
+# Functions to Call
+#
 
 sPrintStep:
         # Prints a step of the solution to the output file
         # Does not actually perform the action
-        #  - Face # to rotate in $a0 (0, 1, 2, 3, 4, 5)
+        #  - Face # to rotate in $a0 (0..5: FRBLDU)
         #  - Direction in        $a1 (0-clockwise, 1-counterclockwise)
         # JOE SEWELL (jks51)
         
@@ -218,11 +225,11 @@ sPrintStep_left:
     j sPrintStep_Next
     
 sPrintStep_bottom:
-    la  $a1, nameU
+    la  $a1, nameD
     j sPrintStep_Next
     
 sPrintStep_top:
-    la  $a1, nameT
+    la  $a1, nameU
     j sPrintStep_Next
     
 sPrintStep_Next:
@@ -250,24 +257,212 @@ sPrintStep_End:
     
         # DEBUG:
     li	$v0, 4		  #print_str (system call 4)
-    la	$a0, debug
+    la	$a0, assert
     syscall
     
     # Return
     jr $ra
-
-sBegin:
+    
+sDebugHelper:
+    li  $v0, 1       # print_int
+    lb  $a0, 0($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 1($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 2($t1)
+    syscall
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    
+    li  $v0, 1       # print_int
+    lb  $a0, 3($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 4($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 5($t1)
+    syscall
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    
+    li  $v0, 1       # print_int
+    lb  $a0, 6($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 7($t1)
+    syscall
+    li  $v0, 1       # print_int
+    lb  $a0, 8($t1)
+    syscall
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    jr $ra
+    
+sDebugPrint:
+    add $t0, $zero, $ra
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, debug
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+	
+    # Print Front Face
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameF
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, frontA
+    jal sDebugHelper
+    
+    # Print Right Face
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameR
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, rightA
+    jal sDebugHelper 
+    
+    # Print Back Face
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameB
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, backA
+    jal sDebugHelper
+    
+    # Print Left Face
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameL
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, leftA
+    jal sDebugHelper
+    
+    # Print Down Face
+    li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameD
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, downA
+    jal sDebugHelper
+	
+	# Print Upper Face
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, nameU
+	syscall
+	li	$v0, 4		  #print_str (system call 4)
+	la	$a0, newline
+	syscall
+    la  $t1, upperA
+    jal sDebugHelper
+    add $ra, $zero, $t0
+    jr  $ra
 
 #
-# REST OF THE CODE GOES HERE
+# ROTATIONS (Will Earley, Joe Sewell)
 #
-    # DEBUG:
-    li  $a0 1
-    li  $a1 1
-    jal sPrintStep
-    li  $a0 2
+# $t0, $t1, $t2 are same as in Will's
+# $t3, $t4      is address of face
+# $t5           is general temporary
+
+eRotD:
+    sw      $ra, storedRt2
+    
+    # Move the adjacent edges
+    la  $t3, frontA
+    lb  $t0, 8($t3) # move $t0, 26 (Joe: 08)
+    lb  $t1, 7($t3) # move $t1, 25 (Joe: 07)
+    lb  $t2, 6($t3) # move $t2, 24 (Joe: 06)
+    
+    la  $t4, leftA
+    lb  $t5, 8($t4)
+    sb  $t5, 8($t3) # move 26, 17
+    lb  $t5, 7($t4)
+    sb  $t5, 7($t3) # move 25, 16
+    lb  $t5, 6($t4)
+    sb  $t5, 6($t3) # move 24, 15
+
+    la  $t3, backA
+    lb  $t5, 2($t3) 
+    sb  $t5, 8($t4) # move 17, 47
+    lb  $t5, 1($t3) 
+    sb  $t5, 7($t4) # move 16, 46
+    lb  $t5, 0($t3) 
+    sb  $t5, 6($t4) # move 15, 45
+    
+    la  $t4, rightA
+    lb  $t5, 8($t4) 
+    sb  $t5, 2($t3) # move 47, 33
+    lb  $t5, 7($t4) 
+    sb  $t5, 1($t3) # move 46, 34
+    lb  $t5, 7($t4) 
+    sb  $t5, 0($t3) # move 45, 35
+    
+    sb  $t0, 8($t4) # move 35, $t0
+    sb  $t1, 7($t4) # move 34, $t1
+    sb  $t2, 6($t4) # move 33, $t2
+    
+    # Move the face's edges
+    la  $t3, downA
+    lb  $t0, 0($t3) # move $t0, 36
+    lb  $t1, 1($t3) # move $t1, 37
+
+    lb  $t5, 2($t3)
+    sb  $t5, 0($t3) # move 36, 38
+    lb  $t5, 5($t3)
+    sb  $t5, 1($t3) # move 37, 41
+    
+    lb  $t5, 8($t3)
+    sb  $t5, 2($t3) # move 38, 44
+    lb  $t5, 7($t3)
+    sb  $t5, 5($t3) # move 41, 43
+    
+    lb  $t5, 6($t3)
+    sb  $t5, 8($t3) # move 44, 42
+    lb  $t5, 3($t3)
+    sb  $t5, 7($t3) # move 43, 39
+    
+    sb  $t0, 6($t3) # move 42, $t0
+    sb  $t1, 3($t3) # move 39, $t1
+    
+    # DEBUG
+    jal sDebugPrint
+    
+    # Write Rotation
+    li  $a0 4
     li  $a1 0
     jal sPrintStep
+    
+    lw  	$ra, storedRt2	#restore the return address
+    jr $ra
+
+#
+# TRAVIS' CODE GOES HERE
+#
+
+dBegin:
+    # DEBUG:
+    jal eRotD
+    
+    # Jump to sEnd when cube has been solved
+    # and all steps output
     j sEnd;
 
 sFileErr:

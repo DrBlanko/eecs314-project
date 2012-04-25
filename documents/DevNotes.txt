@@ -1,0 +1,4 @@
+Dev Notes
+
+* The file is read in and stored FRBLDU, though B is defined w.r.t. D, not L or R
+* 

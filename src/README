@@ -11,13 +11,14 @@ The faces of the Rubik's Cube are represented as an array of bytes in
 input.bin. Each byte indicates the color of that position. The faces are
 read in phone-keypad order. The faces are listed in the following order:
 
-Front, Right, Back, Left, Underside (or Bottom), Top
+Front, Right, Back, Left, Down, Upper
 
 Thus, the flattening of the cube can be seen as:
 
-  T
-L F R B
   U
+L F R
+  D
+  B
   
 Or, when mapped to the actual values:
 
@@ -25,16 +26,27 @@ Or, when mapped to the actual values:
             48 49 50
             51 52 53
             
-27 28 29    00 01 02    09 10 11    18 19 20
-30 31 32    03 04 05    12 13 14    21 22 23
-33 34 35    06 07 08    15 16 17    24 25 26
+27 28 29    00 01 02    09 10 11    
+30 31 32    03 04 05    12 13 14    
+33 34 35    06 07 08    15 16 17    
 
             36 37 38
             39 40 41
             42 43 44
 
-The valid colors are 0x1, 0x2, 0x3, 0x4, 0x5, and 0x6.
-Each face's middle must be a distinct value.
+            18 19 20
+            21 22 23
+            24 25 26
+
+The valid colors are:
+
+Color#  Color Name  Center Piece
+0x1     Red         04 - Front
+0x2     Blue        13 - Right
+0x3     Orange      22 - Back
+0x4     Green       31 - Left
+0x5     Yellow      40 - Down
+0x6     White       49 - Upper
 
 -------------------------
 Instructions for running:

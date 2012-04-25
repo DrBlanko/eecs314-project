@@ -1,0 +1,358 @@
+Will
+LEFT TO DO: Changing the actuall face values of the rotating face.
+
+
+               0  1  2
+               3  4  5
+               6  7  8
+
+9   10 11      18 19 20    27 28 29
+12 13 14       21 22 23    30 31 32
+15 16 17       24 25 26    33 34 35
+     
+               36 37 38
+               39 40 41
+               42 43 44
+
+               45 46 47
+               48 49 50
+               51 52 53
+
+Di:			   // Isn't this D? Make sure...
+move $t0, 26
+move $t1, 25
+move $t2, 24
+move 26, 17
+move 25, 16
+move 24, 15
+move 17, 47
+move 16, 46
+move 15, 45
+move 45, 35
+move 46, 34
+move 47, 33
+move 35, $t0
+move 34, $t1
+move 33, $t2
+
+move $t0, 36
+move $t1, 37
+move 36, 38
+move 37, 41
+move 38, 44
+move 41, 43
+
+move 44, 42
+move 43, 39
+move 24, $t0 // Assuming this is a typo for 42 - Joe
+move 39, $t1
+
+
+			   
+D:
+move $t0, 26
+move $t1, 25
+move $t2, 24
+move 26, 35
+move 25, 34
+move 24, 33
+move 35, 47
+move 34, 46
+move 33, 45
+move 47, 17
+move 46, 16
+move 45, 15
+move 17, $t0
+move 16, $t1
+move 15, $t2
+
+move $t0, 36
+move $t1, 37
+move 36, 42
+move 37, 39
+move 42, 44
+move 39, 43
+move 44, 38
+move 43, 41
+move 38, $t0
+move 41, $t1
+			   
+Ui:			   
+move $t0, 20
+move $t1, 19
+move $t2, 18
+move 20, 11
+move 19, 10
+move 18, 9
+move 11, 51
+move 10, 52
+move 9, 53
+move 53, 29
+move 52, 28
+move 51, 27
+move 29, $t0
+move 28, $t1
+move 27, $t2
+
+move $t0, 0
+move $t1, 1
+move 0, 6
+move 1, 3
+move 6, 8
+move 3, 7
+move 8, 2
+move 7, 5
+move 2, $t0
+move 5, $t1
+			   
+U:
+move $t0, 20
+move $t1, 19
+move $t2, 18
+move 20, 29
+move 19, 28
+move 18, 27
+move 29, 53
+move 28, 52
+move 27, 51
+move 51, 11
+move 52, 10
+move 51, 9
+move 11, $t0
+move 10, $t1
+move 9, $t2
+
+move $t0, 0
+move $t1, 1
+move 0, 2
+move 1, 5
+move 2, 8
+move 5, 7
+move 8, 6
+move 7, 3
+move 6, $t0
+move 3, $t1
+			   
+Fi:
+move $t0, 8
+move $t1, 7
+move $t2, 6
+move 8, 33
+move 7, 30
+move 6, 27
+move 33, 36
+move 30, 37
+move 27, 38
+move 38, 17
+move 37, 14
+move 36, 11
+move 17, $t0
+move 14, $t1
+move 11, $t2
+
+move $t0, 18
+move $t1, 19
+move 18, 20
+move 19, 23
+move 20, 26
+move 23, 25
+move 26, 24
+move 25, 21
+move 24, $t0
+move 21, $t1
+			   
+F:
+move $t0, 8
+move $t1, 7
+move $t2, 6
+move 8, 11
+move 7, 14
+move 8, 17
+move 11, 36
+move 12, 37
+move 15, 38
+move 36, 33
+move 37, 30
+move 38, 27
+move 33, $t0
+move 30, $t1
+move 27, $t2
+
+move $t0, 18
+move $t1, 19
+move 18, 24
+move 19, 21
+move 24, 26
+move 21, 25
+move 26, 20
+move 25, 23
+move 20, $t0
+move 23, $t1
+			   
+B:
+move $t0, 2
+move $t1, 1
+move $t2, 0
+move 2, 9
+move 1, 12
+move 0, 15
+move 9, 42
+move 12, 43
+move 15, 44
+move 42, 35
+move 43, 32
+move 44, 29
+move 35, $t0
+move 32, $t1
+move 29, $t2
+
+move $t0, 51
+move $t1, 52
+move 51, 53
+move 52, 50
+move 53, 47
+move 50, 46
+move 47, 45
+move 46, 48
+move 45, $t0
+move 48, $t1
+			   
+Bi:
+move $t0, 2
+move $t1, 1
+move $t2, 0
+move 2, 35
+move 1, 32
+move 0, 29
+move 35, 42
+move 32, 43
+move 29, 44
+move 44, 15
+move 43, 12
+move 42, 9
+move 15, $t0
+move 12, $t1
+move 9, $t2
+
+move $t0, 51
+move $t1, 52
+move 51, 45
+move 52, 48
+move 45, 47
+move 48, 46
+move 47, 53
+move 52, 50
+move 53, $t0
+move 50, $t1
+			   
+L:
+move $t0, 51
+move $t1, 48
+move $t2, 45
+move 51, 42
+move 48, 39
+move 45, 36
+move 42, 24
+move 39, 21
+move 36, 18
+move 24, 6
+move 21, 3
+move 18,0
+move 6, $t0
+move 3, $t1
+move 0, $t2
+
+move $t0, 9
+move $t1, 10
+move 9, 15
+move 10, 12
+move 15, 17
+move 12, 16
+move 17, 11
+move 16, 14
+move 11, $t0
+move 14, $t1
+
+Li:
+move $t0, 51
+move $t1, 48
+move $t2, 42
+move 51, 6
+move 48, 3
+move 45, 0
+move 6, 24
+move 3, 21
+move 0, 18
+move 24, 42
+move 21, 39
+move 18, 36
+move 36, $t0
+move 39, $t1
+move 42, $t2 
+
+move $t0, 9
+move $t1, 10
+move 9, 11
+move 10, 14
+move 11, 17
+move 14, 16
+move 17, 15
+move 16, 12
+move 15, $t0
+move 12, $t1
+			   
+R:
+move $t0, 53
+move $t1, 50
+move $t2, 47
+move 53, 44
+move 50, 41
+move 47, 38
+move 44, 26
+move 41, 23
+move 38, 20
+move 26, 8
+move 23, 5
+move 20, 2
+move 8, $t0
+move 5, $t1
+move 2, $t2
+
+move $t0, 27
+move $t1, 28
+move 27, 33
+move 28, 30
+move 33, 35
+move 30, 34
+move 35, 29
+move 34, 32
+move 29, $t0
+move 32, $t1
+
+Ri:
+move $t0, 53
+move $t1, 50
+move $t2, 47
+move 53, 8
+move 50, 5
+move 47, 2
+move 8, 26
+move 5, 23
+move 2, 20
+move 26, 44
+move 23, 41
+move 20, 38
+move 38, $t0
+move 41, $t1
+move 44, $t2
+
+move $t0, 27
+move $t1, 28
+move 27, 29
+move 28, 32
+move 29, 35
+move 32, 34
+move 35, 33
+move 34, 30
+move 33, $t0
+move 30, $t1

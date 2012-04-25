@@ -40,4 +40,18 @@ Each face's middle must be a distinct value.
 Instructions for running:
 -------------------------
 1. Set the input.bin file to reflect the initial
-   state of the
+   state of the cube, using a hex editor, following
+   the specification above.
+   
+2. (Optional) Clear the output.txt file, rendering it
+   blank. However, the file must still exist.
+   
+3. From a command line, navigate to this directory.
+
+4. Start qtspim.
+
+5. Load the "source.s" file.
+
+6. Run the file.
+
+7. Open the output.txt file and observe the results.
